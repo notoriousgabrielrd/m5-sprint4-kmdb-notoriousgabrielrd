@@ -6,7 +6,8 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length = 255)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
-    updated_at = serializers.DateField(read_only = True)
+    updated_at = serializers.DateTimeField(read_only = True)
+    date_joined = serializers.DateTimeField(read_only=True)
     password = serializers.CharField(write_only=True)
 
     def validate_email(self,value):
@@ -21,6 +22,4 @@ class UserSerializer(serializers.Serializer):
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255)
-    first_name = serializers.CharField(max_length = 50)
-    last_name = serializers.CharField(max_length=50)
     password = serializers.CharField(write_only=True)

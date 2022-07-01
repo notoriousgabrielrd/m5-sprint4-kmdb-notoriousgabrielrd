@@ -20,3 +20,9 @@ python manage.py startapp accounts
 
 .gitignore
 |_ venv, __pycache__ , db.sqlite3, .env
+
+
+
+__repo__
+
+- https://github.com/Kenzie-Academy-Brasil-Developers/m5-sprint4-kmdb-notoriousgabrielrd
