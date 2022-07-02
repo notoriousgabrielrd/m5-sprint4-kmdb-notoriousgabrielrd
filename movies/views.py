@@ -7,7 +7,13 @@ from rest_framework import status
 from .models import Movie
 from .serializer import MovieSerializer
 
+from .permissions import MyCustomPermission
+from rest_framework.authentication import TokenAuthentication
+
 class MovieView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MyCustomPermission]
+
 
     def post(self,request):
 
@@ -29,7 +35,10 @@ class MovieView(APIView):
 
 
 class MovieViewDetail(APIView):
-    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MyCustomPermission]
+
+
     def get(self,request,movie_id):
 
         try:
@@ -43,3 +52,30 @@ class MovieViewDetail(APIView):
 
         return Response(serializer.data)
     
+
+    def patch(self,request,movie_id):
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+        except Movie.DoesNotExist:
+            return Response({"message": "This movie was not found!"}, status.HTTP_404_NOT_FOUND)
+
+        serializer = MovieSerializer(movie, request.data, partial=True)
+
+        serializer.is_valid()
+
+        serializer.save()
+
+        return Response(serializer.data)
+
+    def delete(self,request, movie_id):
+
+        try:
+            movie = Movie.objects.get(pk=movie_id)
+
+            movie.delete()
+
+            return Response(status = status.HTTP_204_NO_CONTENT)
+
+        except Movie.DoesNotExist:
+
+            return Response({"Message": "This movie was not found!"}, status.HTTP_404_NOT_FOUND)

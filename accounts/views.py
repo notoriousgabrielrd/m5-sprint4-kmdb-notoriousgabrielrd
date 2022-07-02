@@ -6,6 +6,9 @@ from accounts.models import User
 
 from accounts.serializer import LoginSerializer, UserSerializer
 
+from .permissions import MyUserCustomPermission
+from rest_framework.authentication import TokenAuthentication
+
 class RegisterView(APIView):
     
     def post(self,request):
@@ -45,3 +48,40 @@ class LoginView(APIView):
         return Response(
             {"detail": "Invalid email or password, i can't say..."}, status.HTTP_401_UNAUTHORIZED
         )
+
+
+class UserViewDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MyUserCustomPermission]
+
+
+    # def get(self,request):
+    #     users = User.objects.all()
+
+    #     serialzier = UserSerializer(users,many=True)
+
+    #     return Response(serialzier.data)
+
+
+    def get(self,request, user_id):
+        
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"Message": "This user was not found."}, status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user)
+
+        return Response(serializer.data)
+
+
+class UserView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [MyUserCustomPermission]
+
+    def get(self,request):
+        users = User.objects.all()
+
+        serialzier = UserSerializer(users,many=True)
+
+        return Response(serialzier.data)
