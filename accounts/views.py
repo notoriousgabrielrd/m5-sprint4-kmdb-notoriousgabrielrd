@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView, Response, status
 from rest_framework.authtoken.models import Token
@@ -18,9 +17,6 @@ class RegisterView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        # user = User.objects.create_user(**serializer.validated_data)
-
-        # serializer = UserSerializer(user)
 
         serializer.save()
         
@@ -55,13 +51,6 @@ class UserViewDetail(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [MyUserCustomPermission]
 
-
-    # def get(self,request):
-    #     users = User.objects.all()
-
-    #     serialzier = UserSerializer(users,many=True)
-
-    #     return Response(serialzier.data)
 
 
     def get(self,request, user_id):

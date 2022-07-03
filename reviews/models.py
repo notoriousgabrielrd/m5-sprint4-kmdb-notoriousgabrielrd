@@ -25,8 +25,3 @@ class Review(models.Model):
 
 
 
-
-# Must Watch
-# Should Watch
-# Avoid Watch
-# No Opinion default

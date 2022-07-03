@@ -8,7 +8,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        # fields = "__all__"
         fields = ["id","review", "spoilers","movie_id","recomendation","stars","critic"]
         extra_kwargs = {'stars':{'max_value':10,"min_value":1}}
         depth = 1

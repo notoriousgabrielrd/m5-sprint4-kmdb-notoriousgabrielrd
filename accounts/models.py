@@ -11,7 +11,6 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     date_joined = models.DateTimeField()
     username = models.CharField(unique=False, null=True, max_length=55)
-    # username = None
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name","last_name"]
 

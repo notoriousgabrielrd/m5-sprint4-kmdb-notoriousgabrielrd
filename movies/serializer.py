@@ -12,7 +12,7 @@ class MovieSerializer(serializers.Serializer):
     synopsis = serializers.CharField(max_length=255)
 
     genres = GenreSerializer(many=True)
-    # review = Review
+
 
         
     def create(self, validated_data:dict):
