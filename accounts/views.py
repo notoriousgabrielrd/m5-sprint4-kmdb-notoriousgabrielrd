@@ -8,6 +8,7 @@ from accounts.serializer import LoginSerializer, UserSerializer
 
 from .permissions import MyUserCustomPermission
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 
 class RegisterView(APIView):
     
@@ -75,13 +76,17 @@ class UserViewDetail(APIView):
         return Response(serializer.data)
 
 
-class UserView(APIView):
+class UserView(APIView,PageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [MyUserCustomPermission]
 
     def get(self,request):
         users = User.objects.all()
 
-        serialzier = UserSerializer(users,many=True)
+        result_page = self.paginate_queryset(users,request, view=self)
 
-        return Response(serialzier.data)
+        serializer = UserSerializer(result_page,many=True)
+
+
+
+        return self.get_paginated_response(serializer.data)

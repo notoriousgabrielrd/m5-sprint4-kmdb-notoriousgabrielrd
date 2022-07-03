@@ -9,8 +9,9 @@ from .serializer import MovieSerializer
 
 from .permissions import MyCustomPermission
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 
-class MovieView(APIView):
+class MovieView(APIView,PageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [MyCustomPermission]
 
@@ -29,9 +30,12 @@ class MovieView(APIView):
     def get(self,request):
         movies = Movie.objects.all()
 
-        serializer = MovieSerializer(movies, many=True)
+        result_page = self.paginate_queryset(movies,request,view=self)
 
-        return Response(serializer.data)
+        serializer = MovieSerializer(result_page, many=True)
+
+        # return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
 
 class MovieViewDetail(APIView):
